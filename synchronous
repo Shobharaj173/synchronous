@@ -1,0 +1,60 @@
+SYNCHRONOUS COUNTER CODE
+module syn(count, reset,clk);
+output reg[3:0] count;
+input wire clk, reset;
+initial 
+count=4’b0000;
+always@(posedge clk)
+begin
+if(reset)
+count <=4’b0000;
+else
+count<=count+4’b0001;
+end
+endmodule
+
+
+
+rst	clk	d[3]	d[2]	d[1]	d[0]
+1	1	0	0	0	0
+0		0	0	0	1
+0		0	0	1	0
+0		0	0	1	1
+0		0	1	0	0
+0		0	1	0	1
+0		0	1	1	0
+0		0	1	1	1
+0		1	0	0	0
+0		1	0	0	1
+0		1	0	1	0
+		1	0	1	1
+		1	1	0	0
+		1	1	0	1
+		1	1	1	0
+		1	1	1	1
+
+
+TESTBENCH SYNCH CODE
+module syn-tb;
+//Inputs
+reg reset;
+reg clk;
+//outputs
+wire [3:0] count;
+syn uut(
+.count(count),
+.reset(reset),
+.clk(clk)
+);
+initial
+clk=1’b0;
+always
+#10 clk=~clk;
+initial begin
+reset=1’b0;
+#15 reset=1’b1;
+#30 reset=1’b0;
+#30;
+end
+endmodule
+
